@@ -133,33 +133,28 @@ const docTemplate = `{
                 }
             }
         },
-        "/employees": {
+        "/company": {
             "post": {
-                "security": [
-                    {
-                        "BearerAuth": []
-                    }
-                ],
-                "description": "API for User To Create Random Employees Details",
+                "description": "API For User To Create Random Company Details",
                 "tags": [
-                    "Employees"
+                    "Company"
                 ],
-                "summary": "Create Employees",
-                "operationId": "Create Employees",
+                "summary": "Random Company Creating",
+                "operationId": "Company Create",
                 "parameters": [
                     {
-                        "description": "Create Employees Details",
+                        "description": "Company Create Details",
                         "name": "inputs",
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/request.Employee"
+                            "$ref": "#/definitions/request.CompanyRequest"
                         }
                     }
                 ],
                 "responses": {
                     "200": {
-                        "description": "Successfully Employees Created",
+                        "description": "Successfully Company Details Created",
                         "schema": {
                             "allOf": [
                                 {
@@ -169,10 +164,7 @@ const docTemplate = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "type": "array",
-                                            "items": {
-                                                "$ref": "#/definitions/response.Employee"
-                                            }
+                                            "$ref": "#/definitions/response.Company"
                                         }
                                     }
                                 }
@@ -190,12 +182,28 @@ const docTemplate = `{
         }
     },
     "definitions": {
-        "request.Employee": {
+        "request.CompanyRequest": {
             "type": "object",
+            "required": [
+                "ceo_name",
+                "company_name",
+                "total_employees"
+            ],
             "properties": {
-                "count": {
+                "ceo_name": {
+                    "type": "string",
+                    "maxLength": 25,
+                    "minLength": 3
+                },
+                "company_name": {
+                    "type": "string",
+                    "maxLength": 15,
+                    "minLength": 3
+                },
+                "total_employees": {
                     "type": "integer",
-                    "minimum": 1
+                    "maximum": 5000,
+                    "minimum": 100
                 }
             }
         },
@@ -231,6 +239,49 @@ const docTemplate = `{
                 }
             }
         },
+        "response.Company": {
+            "type": "object",
+            "properties": {
+                "ceo": {
+                    "$ref": "#/definitions/response.Employee"
+                },
+                "departments": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/response.Department"
+                    }
+                },
+                "industry": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "totalEmployees": {
+                    "type": "integer"
+                }
+            }
+        },
+        "response.Department": {
+            "type": "object",
+            "properties": {
+                "leader": {
+                    "$ref": "#/definitions/response.Employee"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "teams": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/response.Team"
+                    }
+                },
+                "totalEmployees": {
+                    "type": "integer"
+                }
+            }
+        },
         "response.Employee": {
             "type": "object",
             "properties": {
@@ -238,6 +289,9 @@ const docTemplate = `{
                     "type": "integer"
                 },
                 "email": {
+                    "type": "string"
+                },
+                "hireDate": {
                     "type": "string"
                 },
                 "id": {
@@ -248,6 +302,9 @@ const docTemplate = `{
                 },
                 "role": {
                     "type": "string"
+                },
+                "salary": {
+                    "type": "number"
                 }
             }
         },
@@ -272,6 +329,9 @@ const docTemplate = `{
             "properties": {
                 "access_token": {
                     "type": "string"
+                },
+                "expire_at": {
+                    "type": "string"
                 }
             }
         },
@@ -282,11 +342,31 @@ const docTemplate = `{
                     "type": "string"
                 }
             }
+        },
+        "response.Team": {
+            "type": "object",
+            "properties": {
+                "manager": {
+                    "$ref": "#/definitions/response.Employee"
+                },
+                "members": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/response.Employee"
+                    }
+                },
+                "name": {
+                    "type": "string"
+                },
+                "totalEmployees": {
+                    "type": "integer"
+                }
+            }
         }
     },
     "securityDefinitions": {
         "BearerAuth": {
-            "description": "Add prefix of Bearer before  token Ex: \"Bearer token\"",
+            "description": "Add prefix of Bearer before token. For example, \"Bearer token\".",
             "type": "apiKey",
             "name": "Authorization",
             "in": "header"
@@ -300,8 +380,8 @@ var SwaggerInfo = &swag.Spec{
 	Host:             "",
 	BasePath:         "/api/v1",
 	Schemes:          []string{},
-	Title:            "Go Microservices BoilerPlate",
-	Description:      "BoilerPlate for micro services with GRPC",
+	Title:            "Random Company Generator Microservices",
+	Description:      "This project generates random company details based on user input. It consists of an API Gateway, an Authentication Service, and a Company Service, each serving a specific purpose in the system.",
 	InfoInstanceName: "swagger",
 	SwaggerTemplate:  docTemplate,
 	LeftDelim:        "{{",

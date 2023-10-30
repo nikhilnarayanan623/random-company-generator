@@ -19,14 +19,14 @@ type Server struct {
 }
 
 // To create a new server with HTTP
-// @title Go Microservices BoilerPlate
-// @description BoilerPlate for micro services with GRPC
+// @title Random Company Generator Microservices
+// @description This project generates random company details based on user input. It consists of an API Gateway, an Authentication Service, and a Company Service, each serving a specific purpose in the system.
 //
 // @BasePath					/api/v1
 // @SecurityDefinitions.apikey	BearerAuth
 // @Name						Authorization
 // @In							header
-// @Description				Add prefix of Bearer before  token Ex: "Bearer token"
+// @Description				Add prefix of Bearer before token. For example, "Bearer token".
 // @Query.collection.format	multi
 func NewServerHTTP(cfg config.Config, router http.Handler) *Server {
 

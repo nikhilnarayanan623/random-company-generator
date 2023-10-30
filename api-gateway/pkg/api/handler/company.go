@@ -22,6 +22,14 @@ func NewCompanyHandler(client clientInterfaces.CompanyServiceClient) interfaces.
 	}
 }
 
+// @Summary		Random Company Creating
+// @Description	API For User To Create Random Company Details
+// @Id				Company Create
+// @Tags			Company
+// @Param			inputs	body	request.CompanyRequest{}	true	"Company Create Details"
+// @Router			/company [post]
+// @Success		200	{object}	response.Response{data=response.Company}	"Successfully Company Details Created"
+// @Failure		500	{object}	response.Response{}						"Internal Server Error"
 func (c *companyHandler) Create(ctx *gin.Context) {
 
 	// create request body which have binding validation tags
