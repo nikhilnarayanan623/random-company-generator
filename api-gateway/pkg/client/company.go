@@ -49,7 +49,7 @@ func (c *companyServiceClient) Create(companyReq request.CompanyRequest) ([]byte
 	stream, err := c.client.Create(context.Background(), req)
 
 	if err != nil {
-		return nil, fmt.Errorf("failed to call create school: %w", err)
+		return nil, fmt.Errorf("failed to call create stream: %w", err)
 	}
 
 	var companyData []byte
@@ -61,7 +61,7 @@ func (c *companyServiceClient) Create(companyReq request.CompanyRequest) ([]byte
 			if err == io.EOF {
 				return companyData, nil
 			}
-			return nil, fmt.Errorf("failed to receive school on stream: %w", err)
+			return nil, fmt.Errorf("failed to receive company data on stream: %w", err)
 		}
 		companyData = append(companyData, res.Data...)
 	}

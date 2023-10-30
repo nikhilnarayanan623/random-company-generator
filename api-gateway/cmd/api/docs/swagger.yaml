@@ -1,10 +1,23 @@
 basePath: /api/v1
 definitions:
-  request.Employee:
+  request.CompanyRequest:
     properties:
-      count:
-        minimum: 1
+      ceo_name:
+        maxLength: 25
+        minLength: 3
+        type: string
+      company_name:
+        maxLength: 15
+        minLength: 3
+        type: string
+      total_employees:
+        maximum: 5000
+        minimum: 100
         type: integer
+    required:
+    - ceo_name
+    - company_name
+    - total_employees
     type: object
   request.SignIn:
     properties:
@@ -28,11 +41,41 @@ definitions:
     required:
     - email
     type: object
+  response.Company:
+    properties:
+      ceo:
+        $ref: '#/definitions/response.Employee'
+      departments:
+        items:
+          $ref: '#/definitions/response.Department'
+        type: array
+      industry:
+        type: string
+      name:
+        type: string
+      totalEmployees:
+        type: integer
+    type: object
+  response.Department:
+    properties:
+      leader:
+        $ref: '#/definitions/response.Employee'
+      name:
+        type: string
+      teams:
+        items:
+          $ref: '#/definitions/response.Team'
+        type: array
+      totalEmployees:
+        type: integer
+    type: object
   response.Employee:
     properties:
       age:
         type: integer
       email:
+        type: string
+      hireDate:
         type: string
       id:
         type: string
@@ -40,6 +83,8 @@ definitions:
         type: string
       role:
         type: string
+      salary:
+        type: number
     type: object
   response.Response:
     properties:
@@ -56,16 +101,33 @@ definitions:
     properties:
       access_token:
         type: string
+      expire_at:
+        type: string
     type: object
   response.SignUp:
     properties:
       user_id:
         type: string
     type: object
+  response.Team:
+    properties:
+      manager:
+        $ref: '#/definitions/response.Employee'
+      members:
+        items:
+          $ref: '#/definitions/response.Employee'
+        type: array
+      name:
+        type: string
+      totalEmployees:
+        type: integer
+    type: object
 info:
   contact: {}
-  description: BoilerPlate for micro services with GRPC
-  title: Go Microservices BoilerPlate
+  description: This project generates random company details based on user input.
+    It consists of an API Gateway, an Authentication Service, and a Company Service,
+    each serving a specific purpose in the system.
+  title: Random Company Generator Microservices
 paths:
   /auth/sign-in:
     post:
@@ -139,41 +201,37 @@ paths:
       summary: User Sign Up
       tags:
       - Authentication
-  /employees:
+  /company:
     post:
-      description: API for User To Create Random Employees Details
-      operationId: Create Employees
+      description: API For User To Create Random Company Details
+      operationId: Company Create
       parameters:
-      - description: Create Employees Details
+      - description: Company Create Details
         in: body
         name: inputs
         required: true
         schema:
-          $ref: '#/definitions/request.Employee'
+          $ref: '#/definitions/request.CompanyRequest'
       responses:
         "200":
-          description: Successfully Employees Created
+          description: Successfully Company Details Created
           schema:
             allOf:
             - $ref: '#/definitions/response.Response'
             - properties:
                 data:
-                  items:
-                    $ref: '#/definitions/response.Employee'
-                  type: array
+                  $ref: '#/definitions/response.Company'
               type: object
         "500":
           description: Internal Server Error
           schema:
             $ref: '#/definitions/response.Response'
-      security:
-      - BearerAuth: []
-      summary: Create Employees
+      summary: Random Company Creating
       tags:
-      - Employees
+      - Company
 securityDefinitions:
   BearerAuth:
-    description: 'Add prefix of Bearer before  token Ex: "Bearer token"'
+    description: Add prefix of Bearer before token. For example, "Bearer token".
     in: header
     name: Authorization
     type: apiKey
