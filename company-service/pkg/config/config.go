@@ -8,10 +8,18 @@ import (
 type Config struct {
 	CompanyServiceHost string `mapstructure:"COMPANY_SERVICE_HOST"`
 	CompanyServicePort string `mapstructure:"COMPANY_SERVICE_PORT"`
+
+	DBProtocol string `mapstructure:"DB_PROTOCOL"`
+	DBHost     string `mapstructure:"DB_HOST"`
+	DBName     string `mapstructure:"DB_NAME"`
+	DBUser     string `mapstructure:"DB_USER"`
+	DBPassword string `mapstructure:"DB_PASSWORD"`
+	DBOptions  string `mapstructure:"DB_OPTIONS"`
 }
 
 var envs = []string{
 	"COMPANY_SERVICE_HOST", "COMPANY_SERVICE_PORT",
+	"DB_PROTOCOL", "DB_HOST", "DB_NAME", "DB_USER", "DB_PASSWORD", "DB_OPTIONS",
 }
 
 func LoadConfig() (Config, error) {

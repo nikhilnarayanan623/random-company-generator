@@ -24,12 +24,18 @@ func GetIntBetween(start, end int) int {
 	return start + (rand.Intn(diff))
 }
 
+// To get a random time between start and end
 func GetTimeBetween(start, end time.Time) time.Time {
+	// get the difference of time duration between start and end
+	diff := end.Sub(start)
 
-	diff := end.Sub(start).Seconds() + 1
+	// select and random duration and add it to start.
+	return start.Add(time.Duration(rand.Intn(int(diff))))
+}
 
-	randTime := rand.Float64() * diff // (0 to 1 ) * the time diff
+func GetFloatBetween(start, end float64) float64 {
 
-	// add the radom time with start and return()
-	return start.Add(time.Duration(randTime))
+	diff := (end - start) + 1
+
+	return start + (rand.Float64() * diff)
 }

@@ -5,6 +5,7 @@ import (
 	"company-service/pkg/pb"
 	"company-service/pkg/usecase/interfaces"
 	"encoding/json"
+	"fmt"
 
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
@@ -34,9 +35,12 @@ func (c *companyServiceServer) Create(req *pb.CompanyCreateRequest, stream pb.Co
 		CEO:            req.GetCeo(),
 		TotalEmployees: int(req.GetTotalEmployees()),
 	}
-
-	company := c.companyUseCase.Create(companyReq)
-
+	fmt.Println("got the request")
+	company, err := c.companyUseCase.Create(stream.Context(), companyReq)
+	fmt.Println("comp the request")
+	if err != nil {
+		return status.Errorf(codes.Internal, "failed to create company: %v", err)
+	}
 	data, err := json.Marshal(company)
 
 	if err != nil {

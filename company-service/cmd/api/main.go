@@ -22,36 +22,3 @@ func main() {
 		log.Fatalf("failed to start server: %v", err)
 	}
 }
-
-// var (
-// 	TotalEmployees = 500
-// )
-
-// func main() {
-
-// 	randomGenerator, err := random.NewRandomGenerator()
-// 	if err != nil {
-// 		log.Fatal(err)
-// 	}
-
-// 	usecase := usecase.NewCompanyUseCase(randomGenerator)
-
-// 	company := usecase.Create()
-
-// 	// fmt.Printf("company: %+v\n", company)
-
-// 	data, err := json.Marshal(company)
-// 	if err != nil {
-// 		log.Fatal(err)
-// 	}
-
-// 	file, err := os.Create("./company.json")
-// 	if err != nil {
-// 		log.Fatal(err)
-// 	}
-
-// 	_, err = file.Write(data)
-// 	if err != nil {
-// 		log.Fatal(err)
-// 	}
-// }

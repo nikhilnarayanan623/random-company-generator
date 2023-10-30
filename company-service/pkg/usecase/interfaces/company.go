@@ -3,8 +3,9 @@ package interfaces
 import (
 	"company-service/pkg/domain"
 	"company-service/pkg/models"
+	"context"
 )
 
 type CompanyUseCase interface {
-	Create(companyReq models.CompanyRequest) domain.Company
+	Create(ctx context.Context, companyReq models.CompanyRequest) (*domain.Company, error)
 }

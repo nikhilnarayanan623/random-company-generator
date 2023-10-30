@@ -10,6 +10,8 @@ import (
 	"company-service/pkg/api"
 	"company-service/pkg/api/service"
 	"company-service/pkg/config"
+	"company-service/pkg/db"
+	"company-service/pkg/repository"
 	"company-service/pkg/service/random"
 	"company-service/pkg/usecase"
 )
@@ -21,7 +23,12 @@ func InitializeAPI(cfg config.Config) (*api.Server, error) {
 	if err != nil {
 		return nil, err
 	}
-	companyUseCase := usecase.NewCompanyUseCase(randomGenerator)
+	database, err := db.ConnectToDatabase(cfg)
+	if err != nil {
+		return nil, err
+	}
+	companyRepo := repository.NewCompanyRepo(database)
+	companyUseCase := usecase.NewCompanyUseCase(randomGenerator, companyRepo)
 	companyServiceServer := service.NewCompanyServiceServer(companyUseCase)
 	server, err := api.NewServerGRPC(cfg, companyServiceServer)
 	if err != nil {

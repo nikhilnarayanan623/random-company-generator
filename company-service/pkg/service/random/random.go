@@ -3,6 +3,7 @@ package random
 import (
 	"company-service/pkg/domain"
 	"company-service/pkg/file"
+	"company-service/pkg/store"
 	"company-service/pkg/utils"
 	"sync"
 )
@@ -13,12 +14,16 @@ const (
 )
 
 type RandomGenerator interface {
-	CreateEmployee(team string) domain.Employee
+	GenerateEmployee(minSalary, maxSalary float64) *domain.Employee
+	GetRandomTeamNameByDepartmentName(department string) string
+	GetRandomRoleByTeamName(team string) string
 }
 
 type randomGenerator struct {
-	mu    sync.RWMutex
-	names []string
+	mu               sync.RWMutex
+	names            []string
+	departmentToRole map[string][]string
+	teamToRole       map[string][]string
 }
 
 func NewRandomGenerator() (RandomGenerator, error) {
@@ -30,8 +35,10 @@ func NewRandomGenerator() (RandomGenerator, error) {
 	}
 
 	return &randomGenerator{
-		names: names,
-		mu:    sync.RWMutex{},
+		names:            names,
+		mu:               sync.RWMutex{},
+		departmentToRole: store.GetDepartmentToTeamsMap(),
+		teamToRole:       store.GetTeamToRolesMap(),
 	}, nil
 }
 
